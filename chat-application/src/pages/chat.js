@@ -6,14 +6,16 @@ import styled from "styled-components";
 import { allUsersRoute, host } from "../utils/APIRoutes";
 import ChatContainer from "../components/ChatContainer";
 import { Contacts } from "../components/Contacts";
-import {Welcome} from "../components/Welcome";
+import { Welcome } from "../components/Welcome";
+import { Groups } from '../components/Groups'
 
 export const Chats = () => {
   const navigate = useNavigate();
-   const socket = useRef();
+  const socket = useRef();
   const [contacts, setContacts] = useState([]);
   const [currentChat, setCurrentChat] = useState(undefined);
   const [currentUser, setCurrentUser] = useState(undefined);
+  const [showGroup, setShowGroup] = useState(false)
   const getUser = () => {
     if (!localStorage.getItem('chat-app')) {
       navigate("/login");
@@ -28,13 +30,6 @@ export const Chats = () => {
   useEffect(() => {
     getUser()
   }, []);
-  // useEffect(() => {
-  //   if (currentUser) {
-  //     socket.current = io(host);
-  //     socket.current.emit("add-user", currentUser._id);
-  //   }
-  // }, [currentUser]);
-
   useEffect(() => {
     if (currentUser) {
       if (currentUser.isAvatarImageSet) {
@@ -45,28 +40,32 @@ export const Chats = () => {
       } else {
         navigate("/setAvatar");
       }
-socket.current = io(host)
-socket.current.emit('add-user',currentUser._id)
+      socket.current = io(host)
+      socket.current.emit('add-user', currentUser._id)
 
     }
   }, [currentUser]);
   const handleChatChange = (chat) => {
-    console.log("currenct chat",chat)
+    console.log("currenct chat", chat)
     setCurrentChat(chat);
   };
+  const handleGroups = () => {
+    setShowGroup(true)
+  }
   return (
     <>
-      <Container>
-        {!contacts.length ? <></> :
-          <div className="container">
-            <Contacts contacts={contacts} changeChat={handleChatChange} />
-            {currentChat === undefined ? (
-            <Welcome />
-          ) : (
-           <ChatContainer currentChat={currentChat} socket={socket} />
-          )}
-          </div>}
-      </Container>
+      {showGroup ? <Groups /> :
+        <Container>
+          {!contacts.length ? <></> :
+            <div className="container">
+              <Contacts contacts={contacts} changeChat={handleChatChange} handleGroups={handleGroups} />
+              {currentChat === undefined ? (
+                <Welcome />
+              ) : (
+                <ChatContainer currentChat={currentChat} socket={socket} />
+              )}
+            </div>}
+        </Container>}
     </>
   );
 }

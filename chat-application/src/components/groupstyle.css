@@ -1,0 +1,29 @@
+.input{
+    width: 100%;
+    outline: none;
+    border: 1px rgb(179, 176, 176) solid;
+    padding: 5px;
+    font-size: 25px;
+    background-color: #131324;
+    color: white;
+    border-radius: 5px;
+}
+.buttonContainer{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.create{
+    background-color: rgb(97, 197, 97);
+    width: 30%;
+    padding: 10px;
+    border-radius: 6px;
+}
+.cancel{
+    background-color: rgb(222, 90, 90);
+    width: 30%;
+    padding: 10px;
+    border-radius: 6px;
+}

@@ -1,68 +1,73 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Logo from "../assets/logo.svg";
+import { BiGroup } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
-export const Contacts = ({ contacts, changeChat }) => {
-
-    const [currentUserName, setCurrentUserName] = useState(undefined);
-    const [currentUserImage, setCurrentUserImage] = useState(undefined);
-    const [currentSelected, setCurrentSelected] = useState(undefined);
-    useEffect(() => {
-        const data = JSON.parse(
-            localStorage.getItem('chat-app')
-        );
-        setCurrentUserName(data.username);
-        setCurrentUserImage(data.avatarImage);
-    }, []);
-    const changeCurrentChat = (index, contact) => {
-        setCurrentSelected(index);
-        changeChat(contact);
-    };
-    return (
-        <>
-            {currentUserImage && currentUserImage && (
-                <Container>
-                    <div className="brand">
-                        <img src={Logo} alt="logo" />
-                        <h3>snappy</h3>
-                    </div>
-                    <div className="contacts">
-                        {contacts.map((contact, index) => {
-                            return (
-                                <div
-                                    key={contact._id}
-                                    className={`contact ${index === currentSelected ? "selected" : ""
-                                        }`}
-                                    onClick={() => changeCurrentChat(index, contact)}
-                                >
-                                    <div className="avatar">
-                                        <img
-                                            src={contact.avatarImage}
-                                            alt=""
-                                        />
-                                    </div>
-                                    <div className="username">
-                                        <h3>{contact.username}</h3>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                    <div className="current-user">
-                        <div className="avatar">
-                            <img
-                                src={currentUserImage}
-                                alt="avatar"
-                            />
-                        </div>
-                        <div className="username">
-                            <h2>{currentUserName}</h2>
-                        </div>
-                    </div>
-                </Container>
-            )}
-        </>
+export const Contacts = ({ contacts, changeChat, handleGroups }) => {
+  const navigate = useNavigate();
+  const [currentUserName, setCurrentUserName] = useState(undefined);
+  const [currentUserImage, setCurrentUserImage] = useState(undefined);
+  const [currentSelected, setCurrentSelected] = useState(undefined);
+  useEffect(() => {
+    const data = JSON.parse(
+      localStorage.getItem('chat-app')
     );
+    setCurrentUserName(data.username);
+    setCurrentUserImage(data.avatarImage);
+  }, []);
+  const changeCurrentChat = (index, contact) => {
+    setCurrentSelected(index);
+    changeChat(contact);
+  };
+  return (
+    <>
+      {currentUserImage && currentUserImage && (
+        <Container>
+          <div className="brand">
+            <img src={Logo} alt="logo" />
+            <h3>snappy</h3>
+            <BiGroup className="icon" color="white" size={30} onClick={() => {
+              handleGroups()
+            }} />
+          </div>
+          <div className="contacts">
+            {contacts.map((contact, index) => {
+              return (
+                <div
+                  key={contact._id}
+                  className={`contact ${index === currentSelected ? "selected" : ""
+                    }`}
+                  onClick={() => changeCurrentChat(index, contact)}
+                >
+                  <div className="avatar">
+                    <img
+                      src={contact.avatarImage}
+                      alt=""
+                    />
+                  </div>
+                  <div className="username">
+                    <h3>{contact.username}</h3>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="current-user">
+            <div className="avatar">
+              <img
+                src={currentUserImage}
+                alt="avatar"
+              />
+            </div>
+            <div className="username">
+              <h2>{currentUserName}</h2>
+            </div>
+          </div>
+        </Container>
+      )}
+    </>
+  );
 }
 const Container = styled.div`
   display: grid;
@@ -73,13 +78,16 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     gap: 1rem;
-    justify-content: center;
+    justify-content: space-evenly;
     img {
       height: 2rem;
     }
     h3 {
       color: white;
       text-transform: uppercase;
+    }
+    .icon{
+      cursor: pointer;
     }
   }
   .contacts {
